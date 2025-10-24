@@ -1,0 +1,18 @@
+/* src/app/globals.css */
+@import "tailwindcss";
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css");
+
+:root {
+  --apnd-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply bg-gray-50 text-black antialiased;
+}
+
+/* Keep any custom utilities minimal; rely on Tailwind for responsiveness */

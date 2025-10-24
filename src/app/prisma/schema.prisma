@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String?
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  quotes    Quote[]
+  
+  @@map("users")
+}
+
+model Vendor {
+  id                  String   @id @default(cuid())
+  name                String
+  email               String   @unique
+  phone               String?
+  location            String?
+  rating              Float    @default(0)
+  totalReviews        Int      @default(0)
+  services            String
+  subscriptionStatus  SubscriptionStatus @default(PENDING)
+  subscriptionSince   DateTime?
+  totalQuotes         Int      @default(0)
+  completedJobs       Int      @default(0)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  
+  subscriptions Subscription[]
+  quotes        Quote[]
+  
+  @@map("vendors")
+}
+
+model Subscription {
+  id           String      @id @default(cuid())
+  vendorId     String
+  amount       Float       @default(150)
+  status       SubscriptionStatus @default(PENDING)
+  lastPayment  DateTime?
+  nextPayment  DateTime?
+  paymentMethod String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  
+  vendor Vendor @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  
+  @@map("subscriptions")
+}
+
+model Quote {
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  budget      Float?
+  status      QuoteStatus @default(PENDING)
+  userId      String
+  vendorId    String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  user   User   @relation(fields: [userId], references: [id])
+  vendor Vendor? @relation(fields: [vendorId], references: [id])
+  
+  @@map("quotes")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  VENDOR
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PENDING
+  EXPIRED
+  SUSPENDED
+}
+
+enum QuoteStatus {
+  PENDING
+  ACCEPTED
+  COMPLETED
+  REJECTED
+}
