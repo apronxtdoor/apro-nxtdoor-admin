@@ -4,11 +4,10 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  // optional: use env so .env/.env.local controls the path
-  // url      = env("DATABASE_URL")
-  url      = "file:./prisma/dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
+
 
 enum Role {
   USER
