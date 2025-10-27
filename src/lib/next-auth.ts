@@ -77,7 +77,7 @@ export const authOptions: NextAuthOptions = {
       else if (new URL(url).origin === baseUrl) return url
       return baseUrl + '/dashboard'
     },
-  ],
+  },
   pages: {
     signIn: '/auth/signin',
     error: '/auth/error'
